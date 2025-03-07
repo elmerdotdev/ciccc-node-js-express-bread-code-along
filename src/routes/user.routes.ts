@@ -19,6 +19,26 @@ userRouter.get('/', (req: Request, res: Response) => {
 })
 
 /**
+* Search users by firstname.
+* 
+* @route GET /users/search?firstname=somevalue
+* @query {string} firstname - The firstname to search for.
+* @param {Request<{}, {}, {}, { firstname: string }>} req - Express request containing query parameters.
+* @param {Response} res - Express response object.
+* @returns {void} Responds with an array of matched user objects or an error message.
+*/
+userRouter.get('/search', (req: Request<{}, {}, {}, { firstname: string }>, res: Response) => {
+  const { firstname } = req.query
+  console.log(firstname)
+  const foundUsers = users.filter(user => user.firstname.toLowerCase().includes(firstname.toLowerCase()))
+  if (foundUsers.length === 0) {
+    res.status(404).send("No matching users!")
+    return
+  }
+  res.status(200).json(foundUsers)
+})
+
+/**
  * Get user by ID
  * 
  * @route GET /users/:id
@@ -96,24 +116,6 @@ userRouter.delete('/:id', (req: Request<{ id: string }>, res: Response) => {
   }
   users.splice(foundIndex, 1)
   res.status(200).send("User was deleted!")
-})
-
-/**
- * Search users by firstname.
- * 
- * @route GET /users/search/:firstname
- * @param {Request<{ firstname: string }>} req - Express request containing firstname.
- * @param {Response} res - Express response object.
- * @returns {void} Responds with user object.
- */
-userRouter.get('/search/:firstname', (req: Request<{ firstname: string }>, res: Response) => {
-  const { firstname } = req.params
-  const foundUsers = users.filter(user => user.firstname.toLowerCase().includes(firstname.toLowerCase()))
-  if (foundUsers.length === 0) {
-    res.status(404).send("No matching users!")
-    return
-  }
-  res.status(200).json(foundUsers)
 })
 
 export default userRouter
