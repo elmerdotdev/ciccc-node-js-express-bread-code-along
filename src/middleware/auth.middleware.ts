@@ -11,7 +11,7 @@ const blacklistIP = ['129.212.43.11', '352.62.72.1', '636.27.14.1']
  * @param {NextFunction} next - Express next function.
  * @returns {void} Blocks request if IP is blacklisted, otherwise continues.
  */
-export function auth (req: Request, res: Response, next: NextFunction) {
+export function auth (req: Request, res: Response, next: NextFunction): void {
   console.log(`${req.ip} is visiting the server`)
   if (blacklistIP.includes(req.ip ?? '')) {
     res.status(403).send("Be gone hacker!")
