@@ -29,7 +29,6 @@ userRouter.get('/', (req: Request, res: Response) => {
 */
 userRouter.get('/search', (req: Request<{}, {}, {}, { firstname: string }>, res: Response) => {
   const { firstname } = req.query
-  console.log(firstname)
   const foundUsers = users.filter(user => user.firstname.toLowerCase().includes(firstname.toLowerCase()))
   if (foundUsers.length === 0) {
     res.status(404).send("No matching users!")
